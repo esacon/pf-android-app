@@ -1,0 +1,39 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-lunghealth-dev-162726-authRole",
+      "UnauthRoleArn": "arn:aws:iam::174593234280:role/amplify-lunghealth-dev-162726-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::174593234280:role/amplify-lunghealth-dev-162726-authRole",
+      "Region": "sa-east-1",
+      "DeploymentBucketName": "amplify-lunghealth-dev-162726-deployment",
+      "UnauthRoleName": "amplify-lunghealth-dev-162726-unauthRole",
+      "StackName": "amplify-lunghealth-dev-162726",
+      "StackId": "arn:aws:cloudformation:sa-east-1:174593234280:stack/amplify-lunghealth-dev-162726/2b09d210-ccba-11ec-b612-0a54469c5cf8",
+      "AmplifyAppId": "d1onb918tk5cj"
+    },
+    "categories": {
+      "auth": {
+        "lunghealth2cd5cf1f": {}
+      }
+    }
+  },
+  "test": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-lunghealth-test-85459-authRole",
+      "UnauthRoleArn": "arn:aws:iam::174593234280:role/amplify-lunghealth-test-85459-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::174593234280:role/amplify-lunghealth-test-85459-authRole",
+      "Region": "sa-east-1",
+      "DeploymentBucketName": "amplify-lunghealth-test-85459-deployment",
+      "UnauthRoleName": "amplify-lunghealth-test-85459-unauthRole",
+      "StackName": "amplify-lunghealth-test-85459",
+      "StackId": "arn:aws:cloudformation:sa-east-1:174593234280:stack/amplify-lunghealth-test-85459/49b9e8e0-ce0d-11ec-b15a-0674df2171c0",
+      "AmplifyAppId": "d1onb918tk5cj"
+    },
+    "categories": {
+      "auth": {
+        "lunghealth2cd5cf1f": {},
+        "true": {}
+      }
+    }
+  }
+}
