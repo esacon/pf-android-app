@@ -16,15 +16,16 @@ import com.amplifyframework.core.Amplify
 import com.amplifyframework.storage.options.StorageUploadFileOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
+import org.json.JSONObject
+import org.json.JSONTokener
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 const val REQUEST_CODE = 200
-const val SERVER_URL : String = "https://api-breath.herokuapp.com/audio/upload"
+const val SERVER_URL: String = "https://api-breath.herokuapp.com/audio/upload"
 
 class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
@@ -90,8 +91,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
     private fun startRecorder() {
 
-        //Check Permissions.
-
+        //Check Permissions
         if (!permissionGranted) {
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
             return
@@ -114,13 +114,12 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
             try {
                 prepare()
             } catch (e: IOException) {
+                Log.e("Record error", e.toString())
             }
-
             start()
         }
 
         //Graphic Variables.
-
         isRecording = true
         isStopped = false
         audioTimer.setTextColor(getColor(R.color.mainBlue))
@@ -131,7 +130,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     }
 
     private fun stopRecorder() {
-
         //Stop recording.
         recorder.apply {
             stop()
@@ -139,7 +137,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         }
 
         //Graphic Variables.
-
         isRecording = false
         isStopped = true
         audioTimer.setTextColor(getColor(R.color.colorText))
@@ -151,14 +148,9 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private fun uploadRecorder() {
 
         //Upload the saved audio to Webpage.
-        //UploadUtility(this).uploadFile("$dirPath$filename.mp3") // Either Uri, File or String file path
         uploadFile(File("$dirPath$filename.mp3"), filename)
         //Graphic Variables.
         timer.stop()
-
-        /*
-        Toast.makeText(this, "Record successfully uploaded.", Toast.LENGTH_SHORT).show()
-         */
 
         isStopped = false
         isRecording = false
@@ -173,7 +165,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private fun cancelRecorder() {
 
         //Cancel the recording and delete file (if it was being recorded).
-
         if (isRecording)
             recorder.apply {
                 stop()
@@ -183,7 +174,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         File("$dirPath$filename.mp3").delete()
 
         //Graphic Variables.
-
         isStopped = false
         isRecording = false
         timer.stop()
@@ -217,7 +207,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
             {
                 Log.i("MyAmplifyApp", "Successfully uploaded: ${it.key}")
                 showToast("File uploaded.")
-                generateDonwloadURL(it.key)
+                generateDownloadURL(it.key)
             },
             {
                 Log.e("MyAmplifyApp", "Upload failed", it)
@@ -226,38 +216,58 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         )
     }
 
-    private fun generateDonwloadURL(fileName: String) {
+    private fun generateDownloadURL(fileName: String) {
         Amplify.Storage.getUrl(
             fileName,
             {
                 Log.i("MyAmplifyApp", "Successfully generated: ${it.url}")
-                val response = postDataServer("audio_file", it.url.toString())
-                showToast(response)
+                val requestBody: RequestBody = buildRequest("audio_file", it.url.toString())
+                postDataServer(requestBody)
             },
             { Log.e("MyAmplifyApp", "URL generation failure", it) }
         )
         toggleProgressDialog(false)
     }
 
-    private fun postDataServer(key: String, value: String) : String {
+    private fun buildRequest(key: String, value: String): RequestBody {
+        return FormBody.Builder()
+            .add(key, value)
+            .build()
+    }
+
+    private fun buildRequest(
+        key: String, value: String, key2: String, value2: String
+    ): RequestBody {
+        return FormBody.Builder()
+            .add(key, value)
+            .add(key2, value2)
+            .build()
+    }
+
+    private fun postDataServer(requestBody: RequestBody): String {
         val client = OkHttpClient()
 
-        val requestBody: RequestBody = MultipartBody.Builder()
-            .addFormDataPart(key, value)
-            .build()
         try {
-            val request: Request = Request.Builder().url(SERVER_URL).post(requestBody).addHeader("content-type", "multipart/form-data;").build()
-            val response : Response = client.newCall(request).execute()
+            val request: Request = Request.Builder()
+                .url(SERVER_URL)
+                .post(requestBody)
+                .addHeader("content-type", "multipart/form-data;").build()
+
+            val response: Response = client.newCall(request).execute()
+
             if (response.isSuccessful) {
                 Log.d("Data upload", "success")
-                Log.i("Info response", response.message)
-                return response.message
+                val responseBodyString = response.body!!.string()
+                val jsonObject = JSONTokener(responseBodyString).nextValue() as JSONObject
+                val message = jsonObject.getString("data")
+                Log.i("Info response", message)
+                return message
             } else {
                 Log.e("Data upload", "failed")
                 Log.e("Response error", response.toString())
             }
             response.close()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Log.e("Response error", "Post failed")
         }
 
