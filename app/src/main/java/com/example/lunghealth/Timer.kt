@@ -6,7 +6,7 @@ import java.time.Duration
 
 class Timer(listener: OnTimerTickListener) {
 
-    interface OnTimerTickListener{
+    interface OnTimerTickListener {
         fun onTimerTick(duration: String)
     }
 
@@ -26,7 +26,6 @@ class Timer(listener: OnTimerTickListener) {
 
     fun start() {
         handler.postDelayed(runnable, delay)
-
     }
 
     fun pause() {
@@ -44,10 +43,10 @@ class Timer(listener: OnTimerTickListener) {
         val minutes = (duration / (1000 * 60)) % 60
         val hours = (duration / (1000 * 60 * 60))
 
-        val formatted = if(hours > 0)
-            "%02d:%02d:%02d.%02d".format(hours, minutes, seconds, millis/10)
+        val formatted = if (hours > 0)
+            "%02d:%02d:%02d.%02d".format(hours, minutes, seconds, millis / 10)
         else
-            "%02d:%02d.%02d".format(minutes, seconds, millis/10)
+            "%02d:%02d.%02d".format(minutes, seconds, millis / 10)
 
         return formatted
     }

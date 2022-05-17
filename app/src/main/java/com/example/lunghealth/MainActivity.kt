@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
     private lateinit var recorder: MediaRecorder
     private var dirPath = ""
-    private var filename = ""
+    private var fileName = ""
     private var isRecording = false
     private var isStopped = false
     private lateinit var vibrator: Vibrator
@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     }
 
     private fun startRecorder() {
-
         //Check Permissions
         if (!permissionGranted) {
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
@@ -103,19 +102,27 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
         var simpleDateFormat = SimpleDateFormat("yyyy.MM.DD_hh.mm.ss")
         var date = simpleDateFormat.format(Date())
-        filename = "audio_record_$date"
+        fileName = "audio_record_$date.mp3"
 
         recorder.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            setOutputFile("$dirPath$filename.mp3")
+            setOutputFile("$dirPath$fileName")
+            setMaxDuration(4000)
 
             try {
                 prepare()
             } catch (e: IOException) {
                 Log.e("Record error", e.toString())
             }
+
+            setOnInfoListener { mr, what, extra ->
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    stopRecorder()
+                }
+            }
+            
             start()
         }
 
@@ -148,7 +155,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private fun uploadRecorder() {
 
         //Upload the saved audio to Webpage.
-        uploadFile(File("$dirPath$filename.mp3"), filename)
+        uploadFile(File("$dirPath$fileName"), fileName)
         //Graphic Variables.
         timer.stop()
 
@@ -171,7 +178,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
                 release()
             }
 
-        File("$dirPath$filename.mp3").delete()
+        File("$dirPath$fileName").delete()
 
         //Graphic Variables.
         isStopped = false
@@ -195,7 +202,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     override fun onTimerTick(duration: String) {
         waveformView.addAmplitude(recorder.maxAmplitude.toFloat())
         audioTimer.text = duration
-        if (duration == "00:02:00") stopRecorder()
     }
 
     private fun uploadFile(audioFile: File, name: String) {
@@ -207,26 +213,18 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
             {
                 Log.i("MyAmplifyApp", "Successfully uploaded: ${it.key}")
                 showToast("File uploaded.")
-                generateDownloadURL(it.key)
+                Thread {
+                    val requestBody: RequestBody = buildRequest("audio_file", fileName)
+                    postDataServer(requestBody)
+                    toggleProgressDialog(false)
+                }.start()
             },
             {
                 Log.e("MyAmplifyApp", "Upload failed", it)
                 showToast("Upload failed.")
+                toggleProgressDialog(false)
             }
         )
-    }
-
-    private fun generateDownloadURL(fileName: String) {
-        Amplify.Storage.getUrl(
-            fileName,
-            {
-                Log.i("MyAmplifyApp", "Successfully generated: ${it.url}")
-                val requestBody: RequestBody = buildRequest("audio_file", it.url.toString())
-                postDataServer(requestBody)
-            },
-            { Log.e("MyAmplifyApp", "URL generation failure", it) }
-        )
-        toggleProgressDialog(false)
     }
 
     private fun buildRequest(key: String, value: String): RequestBody {
