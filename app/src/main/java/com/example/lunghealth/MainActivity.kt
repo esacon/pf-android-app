@@ -30,14 +30,21 @@ const val SERVER_URL: String = "https://api-breath.herokuapp.com/audio/upload"
 class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
     private lateinit var amplitudes: ArrayList<Float>
-    private var permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO)
+    private var permissions = arrayOf(
+        android.Manifest.permission.RECORD_AUDIO,
+        android.Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+    )
     private var permissionGranted = false
 
+    private lateinit var audioRecorder: AudioRecorder
     private lateinit var recorder: MediaRecorder
-    private var dirPath = ""
-    private var fileName = ""
-    private var isRecording = false
-    private var isStopped = false
+    private var dirPath: String = ""
+    private var fileName: String = ""
+    private var wavFileName: String = ""
+    private var isRecording: Boolean = false
+    private var isStopped: Boolean = false
     private lateinit var vibrator: Vibrator
     private lateinit var timer: Timer
     private var dialog: ProgressDialog? = null
@@ -47,6 +54,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         setContentView(R.layout.activity_main)
 
         AmplifyInit().intializeAmplify(this)
+        dirPath = "${externalCacheDir?.absolutePath}/"
+        audioRecorder = AudioRecorder(dirPath)
 
         permissionGranted = ActivityCompat.checkSelfPermission(
             this,
@@ -98,18 +107,18 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
         //Start Recording.
         recorder = MediaRecorder()
-        dirPath = "${externalCacheDir?.absolutePath}/"
 
-        var simpleDateFormat = SimpleDateFormat("yyyy.MM.DD_hh.mm.ss")
+        var simpleDateFormat = SimpleDateFormat("ddMMyyyy_hhmmss")
         var date = simpleDateFormat.format(Date())
-        fileName = "audio_record_$date.mp3"
+        fileName = "$date.mp3"
+        wavFileName = "$date.wav"
 
         recorder.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            setOutputFile("$dirPath$fileName")
-            setMaxDuration(4000)
+            setOutputFile("$dirPath$date.mp3")
+            setMaxDuration(20000)
 
             try {
                 prepare()
@@ -122,9 +131,11 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
                     stopRecorder()
                 }
             }
-            
+
             start()
         }
+
+        audioRecorder.startRecord()
 
         //Graphic Variables.
         isRecording = true
@@ -143,6 +154,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
             release()
         }
 
+        audioRecorder.stopRecord()
+
         //Graphic Variables.
         isRecording = false
         isStopped = true
@@ -152,31 +165,16 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         timer.stop()
     }
 
-    private fun uploadRecorder() {
-
-        //Upload the saved audio to Webpage.
-        uploadFile(File("$dirPath$fileName"), fileName)
-        //Graphic Variables.
-        timer.stop()
-
-        isStopped = false
-        isRecording = false
-        btnRecord.setImageResource(R.drawable.ic_mic)
-        amplitudes = waveformView.clear()
-        audioTimer.text = "00:00.00"
-        btnDelete.isClickable = false
-        btnDelete.setImageResource(R.drawable.ic_delete)
-        btnDelete.visibility = View.INVISIBLE
-    }
 
     private fun cancelRecorder() {
-
         //Cancel the recording and delete file (if it was being recorded).
-        if (isRecording)
+        if (isRecording) {
+            audioRecorder.stopRecord()
             recorder.apply {
                 stop()
                 release()
             }
+        }
 
         File("$dirPath$fileName").delete()
 
@@ -194,14 +192,20 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         btnDelete.visibility = View.INVISIBLE
     }
 
-    private fun dropMenu() {
-        Toast.makeText(this, "Menu will be available soon...", Toast.LENGTH_SHORT).show()
-        btnMenu.isClickable = false
-    }
+    private fun uploadRecorder() {
+        //Upload the saved audio to Webpage.
+        uploadFile(File("${dirPath}/audio_files/audio.wav"), wavFileName)
+        //Graphic Variables.
+        timer.stop()
 
-    override fun onTimerTick(duration: String) {
-        waveformView.addAmplitude(recorder.maxAmplitude.toFloat())
-        audioTimer.text = duration
+        isStopped = false
+        isRecording = false
+        btnRecord.setImageResource(R.drawable.ic_mic)
+        amplitudes = waveformView.clear()
+        audioTimer.text = "00:00.00"
+        btnDelete.isClickable = false
+        btnDelete.setImageResource(R.drawable.ic_delete)
+        btnDelete.visibility = View.INVISIBLE
     }
 
     private fun uploadFile(audioFile: File, name: String) {
@@ -214,7 +218,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
                 Log.i("MyAmplifyApp", "Successfully uploaded: ${it.key}")
                 showToast("File uploaded.")
                 Thread {
-                    val requestBody: RequestBody = buildRequest("audio_file", fileName)
+                    val requestBody: RequestBody = buildRequest("audio_file", name)
                     postDataServer(requestBody)
                     toggleProgressDialog(false)
                 }.start()
@@ -268,8 +272,17 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         } catch (e: Exception) {
             Log.e("Response error", "Post failed")
         }
-
         return ""
+    }
+
+    private fun dropMenu() {
+        Toast.makeText(this, "Menu will be available soon...", Toast.LENGTH_SHORT).show()
+        btnMenu.isClickable = false
+    }
+
+    override fun onTimerTick(duration: String) {
+        waveformView.addAmplitude(recorder.maxAmplitude.toFloat())
+        audioTimer.text = duration
     }
 
     private fun toggleProgressDialog(show: Boolean) {
