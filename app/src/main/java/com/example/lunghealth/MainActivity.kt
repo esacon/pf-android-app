@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.storage.options.StorageUploadFileOptions
+import com.example.lunghealth.audio_record.AmplifyInit
+import com.example.lunghealth.audio_record.AudioRecorder
+import com.example.lunghealth.audio_visualization.Timer
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
 import org.json.JSONObject

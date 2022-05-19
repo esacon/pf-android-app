@@ -3,7 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/drawable/ic_delete.xml" value="0.2515" />
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/drawable/ic_done.xml" value="0.2795" />
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2795" />
         <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/drawable/ic_user.xml" value="0.164" />
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/drawable/switch_trcks.xml" value="0.1165" />
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/drawable/switch_tumbs.xml" value="0.1165" />
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1499330655957162" />
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/layout-w936dp/activity_login.xml" value="0.175" />
+        <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/layout/activity_login.xml" value="0.275" />
         <entry key="..\:/Users/Enrique Niebles/Documents/Proyecto Final/Android App/app/src/main/res/layout/activity_main.xml" value="0.2558876811594203" />
       </map>
     </option>

@@ -1,8 +1,7 @@
-package com.example.lunghealth
+package com.example.lunghealth.audio_visualization
 
 import android.os.Looper
 import android.os.Handler
-import java.time.Duration
 
 class Timer(listener: OnTimerTickListener) {
 

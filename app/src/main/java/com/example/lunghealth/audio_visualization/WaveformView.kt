@@ -1,4 +1,4 @@
-package com.example.lunghealth
+package com.example.lunghealth.audio_visualization
 
 import android.content.Context
 import android.graphics.Canvas

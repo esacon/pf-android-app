@@ -1,4 +1,4 @@
-package com.example.lunghealth
+package com.example.lunghealth.audio_record
 
 import android.app.Application
 import android.content.Context

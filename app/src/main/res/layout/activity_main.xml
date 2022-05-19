@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="30dp" />
 
-    <com.example.lunghealth.WaveformView
+    <com.example.lunghealth.audio_visualization.WaveformView
         android:id="@+id/waveformView"
         android:layout_width="match_parent"
         android:layout_height="400px"
