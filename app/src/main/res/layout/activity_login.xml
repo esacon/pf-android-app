@@ -25,8 +25,8 @@
         app:cardElevation="10dp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginEnd="38dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/logIn"
-                    android:text="Log-in"
+                    android:text="@string/log_in"
                     android:paddingTop="5dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/signUp"
-                    android:text="Sign-Up"
+                    android:text="@string/sign_up"
                     android:paddingTop="5dp"
                     android:textAlignment="center"
                     android:textColor="@color/mainBlue"
@@ -92,9 +92,9 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:hint="Nombre de usuario:"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:hint="@string/nombre_de_usuario"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -114,10 +114,10 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:hint="Contraseña:"
+                    android:hint="@string/contrasena"
                     android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -160,8 +160,8 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:hint="@string/nombre"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -181,8 +181,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:hint="@string/edad"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -202,8 +202,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:hint="@string/nombre_de_usuario"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -223,8 +223,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:hint="@string/email"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -245,8 +245,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:hint="@string/contrase_a"
                     android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -268,8 +268,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:hint="@string/confirmar_contrasena"
                     android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     app:shapeAppearanceOverlay="@style/Button4"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
@@ -291,8 +291,26 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/signInButton"
+                android:id="@+id/logInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:elevation="15dp"
+                android:gravity="center"
                 android:text="@string/iniciar_sesion"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="normal|bold"
+                app:backgroundTint="@color/mainBlue"
+                app:shapeAppearanceOverlay="@style/Button5" />
+
+            <Button
+                android:id="@+id/signUpButton"
+                android:text="@string/signup"
                 android:textSize="17sp"
                 android:textAllCaps="false"
                 android:elevation="15dp"
@@ -303,6 +321,7 @@
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:textStyle="normal|bold"
+                android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/Button5"
                 app:backgroundTint="@color/mainBlue"
                 android:layout_width="match_parent"
@@ -312,11 +331,12 @@
     </androidx.cardview.widget.CardView>
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/doctoImage"
         android:layout_width="274dp"
         android:layout_height="159dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center"
-        app:srcCompat="@drawable/doctor_fig" />
+        app:srcCompat="@drawable/doctor_fig"
+        android:contentDescription="@string/appview" />
 
 </LinearLayout>

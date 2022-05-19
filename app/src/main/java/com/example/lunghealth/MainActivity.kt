@@ -52,9 +52,18 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private lateinit var timer: Timer
     private var dialog: ProgressDialog? = null
 
+    private var userID: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val intentInfo = intent.extras
+
+        if (intentInfo != null) {
+            userID = intentInfo["user_id"] as String
+            Log.i("User ID", userID)
+        }
 
         AmplifyInit().intializeAmplify(this)
         dirPath = "${externalCacheDir?.absolutePath}/"
@@ -221,7 +230,10 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
                 Log.i("MyAmplifyApp", "Successfully uploaded: ${it.key}")
                 showToast("File uploaded.")
                 Thread {
-                    val requestBody: RequestBody = buildRequest("audio_file", name)
+                    val requestBody: RequestBody = FormBody.Builder()
+                        .add("audio_filename", name)
+                        .add("user_id", userID)
+                        .build()
                     postDataServer(requestBody)
                     toggleProgressDialog(false)
                 }.start()
@@ -237,15 +249,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private fun buildRequest(key: String, value: String): RequestBody {
         return FormBody.Builder()
             .add(key, value)
-            .build()
-    }
-
-    private fun buildRequest(
-        key: String, value: String, key2: String, value2: String
-    ): RequestBody {
-        return FormBody.Builder()
-            .add(key, value)
-            .add(key2, value2)
             .build()
     }
 

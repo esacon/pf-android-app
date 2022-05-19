@@ -12,10 +12,16 @@
     <string name="iniciar_sesion">Iniciar sesión</string>
     <string name="olvido_contrasena">¿Olvidó su contraseña?</string>
     <string name="lung_health_app">Lung Health App</string>
-    <string name="nombre_de_usuario">Nombre de usuario:</string>
     <string name="confirmar_contrasena">Confirmar contraseña:</string>
     <string name="contrase_a">Contraseña:</string>
     <string name="email">Correo electrónico:</string>
     <string name="nombre">Nombre:</string>
     <string name="edad">Edad:</string>
+    <string name="signin">Iniciar sesión</string>
+    <string name="signup">Registrarse</string>
+    <string name="nombre_de_usuario">Nombre de usuario:</string>
+    <string name="contrasena">Contraseña:</string>
+    <string name="log_in">Log-in</string>
+    <string name="sign_up">Sign-Up</string>
+    <string name="appview">AppView</string>
 </resources>
